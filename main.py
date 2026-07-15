@@ -6,7 +6,7 @@
 
 import argparse
 import webbrowser
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 import config
 import fetcher
@@ -83,7 +83,7 @@ def print_headlines(site_name: str, items: list[dict], first_page_had_items: boo
 
 def main(quiet: bool = False) -> None:
     """quiet=Trueの場合、コンソール表示とブラウザの自動起動を行わない（定期自動実行向け）。"""
-    now = datetime.now()
+    now = datetime.now(timezone(timedelta(hours=9)))
     results = []  # HTML版のレポート作成用に、サイトごとの結果をためておく
 
     for site in config.SITES:
