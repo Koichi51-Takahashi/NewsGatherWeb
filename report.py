@@ -26,6 +26,8 @@ _STYLE = """
   .article { margin: 1em 0; padding: 0.8em 1em; background: #fff; border: 1px solid #ddd; border-radius: 6px; }
   .time { color: #666; font-size: 0.9em; }
   .title { font-weight: bold; margin: 0.2em 0 0.6em; }
+  .title a { color: inherit; text-decoration: none; }
+  .title a:hover { text-decoration: underline; }
   .links a { margin-right: 1.2em; text-decoration: none; color: #1a5fb4; }
   .links a:hover { text-decoration: underline; }
   .empty, .error { color: #888; font-style: italic; }
@@ -42,6 +44,8 @@ _STYLE_2COL = """
   .article { margin: 1em 0; padding: 0.8em 1em; background: #fff; border: 1px solid #ddd; border-radius: 6px; }
   .time { color: #666; font-size: 0.9em; }
   .title { font-weight: bold; margin: 0.2em 0 0.6em; }
+  .title a { color: inherit; text-decoration: none; }
+  .title a:hover { text-decoration: underline; }
   .links a { margin-right: 1.2em; text-decoration: none; color: #1a5fb4; }
   .links a:hover { text-decoration: underline; }
   .empty, .error { color: #888; font-style: italic; }
@@ -119,17 +123,17 @@ def _build_article_div(item: dict, article_fetcher, is_summary: bool) -> str:
 
     local_path = _save_article(item, article_fetcher, is_summary)
     if local_path is not None:
-        body_link = f'<a href="{html_lib.escape(local_path)}">本文だけ</a>'
+        # 別タブで開くと、本文ページ側の「一覧に戻る」を踏むたびにタブが増え続けるため、同じタブ内で開く
+        title_html = f'<a href="{html_lib.escape(local_path)}">{title}</a>'
     else:
-        body_link = '<span class="empty">（本文を取得できませんでした）</span>'
+        title_html = f'{title} <span class="empty">（本文を取得できませんでした）</span>'
 
     return (
         '<div class="article">'
         f'<div class="time">{time_label}</div>'
-        f'<div class="title">{title}</div>'
+        f'<div class="title">{title_html}</div>'
         '<div class="links">'
         f'<a href="{original_url}" target="_blank" rel="noopener">元の記事</a>'
-        f'{body_link}'
         '</div></div>'
     )
 
