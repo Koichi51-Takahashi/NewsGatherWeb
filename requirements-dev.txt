@@ -1,0 +1,4 @@
+# Tools for checking (lint). Not used by the production update job (see requirements.txt).
+ruff>=0.5
+yamllint>=1.35
+pymarkdownlnt>=0.9

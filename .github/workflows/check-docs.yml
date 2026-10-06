@@ -1,0 +1,46 @@
+name: Check Docs
+
+# 文書・設定・コードの書き方を点検する（公開はしない）。
+# 違反があるとこのワークフローが失敗（赤）になる。ニュース更新（update-news.yml）とは別。
+on:
+  push:
+    paths:
+      - "README.md"
+      - "docs/**"
+      - "**.py"
+      - ".github/**"
+      - "pyproject.toml"
+      - ".yamllint"
+      - "requirements-dev.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install lint tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Check docs (project rules)
+        run: python check_docs.py
+
+      - name: Lint Python (ruff)
+        run: ruff check .
+
+      - name: Lint workflow YAML (yamllint)
+        run: yamllint .github
+
+      - name: Lint Markdown (pymarkdown)
+        run: pymarkdown scan README.md docs/HOW_IT_WORKS.md

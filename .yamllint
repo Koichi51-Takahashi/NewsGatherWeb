@@ -1,0 +1,14 @@
+# yamllint（YAMLの書き方の点検）の設定
+
+extends: default
+
+rules:
+  # GitHub Actionsのワークフローは先頭に「---」を書かないのが一般的なため無効にする
+  document-start: disable
+  # ワークフローの「on:」はYAMLでは真偽値に誤解されうるが、GitHub Actionsでは正しい書き方。
+  # 値（true/false以外の文字）は点検するが、キー名の「on」は対象外にする
+  truthy:
+    check-keys: false
+  # 日本語コメントが長くなるため、行の長さの上限は緩める
+  line-length:
+    max: 140

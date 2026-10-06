@@ -29,6 +29,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Check docs
+        run: python check_docs.py
+
       - name: Fetch news and generate HTML
         run: python main.py --quiet
 

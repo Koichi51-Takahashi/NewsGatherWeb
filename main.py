@@ -6,7 +6,7 @@
 
 import argparse
 import webbrowser
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 
 import config
 import fetcher
@@ -89,7 +89,7 @@ def main(quiet: bool = False) -> None:
     for site in config.SITES:
         try:
             items, first_page_had_items, hit_page_limit = collect_headlines(site, now)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 1つのサイトの失敗で全体を止めず、残りのサイトの処理を続ける
             if not quiet:
                 print(f"===== {site['name']} =====")
                 print(f"（取得エラー: {e}）")

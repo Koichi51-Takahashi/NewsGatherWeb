@@ -21,10 +21,10 @@ def fetch_nhk_summary(url: str) -> str | None:
     """
     try:
         html = fetcher.fetch_direct_html(url)
-    except Exception:
+    except Exception:  # noqa: BLE001 取得失敗は何であれ「本文なし」として扱い、他の記事の処理を続ける
         return None
     soup = BeautifulSoup(html, "html.parser")
-    meta = soup.find("meta", attrs={"name": "description"})
+    meta =soup.find("meta", attrs={"name": "description"})
     if meta is None or not meta.get("content"):
         return None
     return _NHK_DESCRIPTION_PREFIX.sub("", meta["content"].strip()).strip()
@@ -34,7 +34,7 @@ def fetch_jiji_body(url: str) -> str | None:
     """時事通信記事ページから本文全文を取得する。取得できない場合はNoneを返す。"""
     try:
         html = fetcher.fetch_direct_html(url)
-    except Exception:
+    except Exception:  # noqa: BLE001 取得失敗は何であれ「本文なし」として扱い、他の記事の処理を続ける
         return None
     soup = BeautifulSoup(html, "html.parser")
     article_div = soup.find("div", class_="ArticleText")
